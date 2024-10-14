@@ -1,4 +1,4 @@
-import { ActionRowBuilder, ApplicationCommandOptionType, ButtonBuilder, ButtonStyle, ComponentType, PermissionFlagsBits } from "discord.js";
+import { ActionRowBuilder, ApplicationCommandOptionType, ButtonBuilder, ButtonStyle, ComponentType, TextChannel, NewsChannel, ThreadChannel, ButtonInteraction } from "discord.js";
 import { NetLevelBotCommand } from "../../class/Builders";
 import { InteractionError } from "../../util/classes";
 
@@ -487,12 +487,12 @@ export default new NetLevelBotCommand({
                     ]
                 }).catch(null);
             
-                const collector = interaction.channel?.createMessageComponentCollector({
+                const collector = (interaction.channel as TextChannel | NewsChannel | ThreadChannel)?.createMessageComponentCollector({
                     componentType: ComponentType.Button,
                     time: 15000
                 });
             
-                collector?.on('collect', async (i) => {
+                collector?.on('collect', async (i: ButtonInteraction) => {
                     if (i.user.id !== interaction.user.id) {
                         await i.reply({
                             content: 'You are not the author of this interaction.',

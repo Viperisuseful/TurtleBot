@@ -1,4 +1,4 @@
-import { ActionRowBuilder, ComponentType, StringSelectMenuBuilder } from "discord.js";
+import { ActionRowBuilder, ComponentType, StringSelectMenuBuilder, TextChannel, Interaction, SelectMenuInteraction } from "discord.js";
 import { NetLevelBotCommand } from "../../class/Builders";
 import { InteractionError } from "../../util/classes";
 
@@ -81,7 +81,7 @@ export default new NetLevelBotCommand({
                 });
             });
 
-            const collector = interaction.channel?.createMessageComponentCollector({
+            const collector = (interaction.channel as TextChannel)?.createMessageComponentCollector({
                 componentType: ComponentType.StringSelect,
                 time: 60000 * 3
             });
@@ -110,7 +110,7 @@ export default new NetLevelBotCommand({
                 ]
             });
 
-            collector?.on('collect', async (i) => {
+            collector?.on('collect', async (i: SelectMenuInteraction) => {
                 if (i.user.id !== interaction.user.id) {
                     await i.reply({
                         content: 'You are not the author of this interaction.',
